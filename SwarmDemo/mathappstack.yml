@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  mathwebapp:
+    image: amitdubay/mathwebapp:latest
+    networks:
+      - mathnet
+    ports:
+      - '80:80' # expose 80 on host and sent to 80 in container
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: stop-first
+  mathapi:
+    image: amitdubay/mathapi:latest
+    networks:
+      - mathnet
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: start-first
+
+  visualizer:
+    image: dockersamples/visualizer
+    ports:
+      - 8080:8080
+    stop_grace_period: 1m30s
+    networks:
+      - mathnet
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  mathnet:

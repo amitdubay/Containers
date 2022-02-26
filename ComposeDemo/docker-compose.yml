@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  mathwebapp:
+    image: mathwebapp
+    ports:
+      - '80:80' # expose 80 on host and sent to 80 in container
+  mathapi:
+    image: mathapi
+    

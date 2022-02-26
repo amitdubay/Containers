@@ -1,0 +1,25 @@
+<html>
+    <title>Sample Calculator</title>
+    <head>
+        <script type="text/javascript">
+            function calculateSum(){
+            var a = document.getElementById('txta').value;
+            var b = document.getElementById('txtb').value;
+            fetch('/api/Math/Sum?a=' + a + '&b=' + b)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById('divTotal').innerText = data.result;
+                document.getElementById('divIP').innerText = data.ip;
+            });
+        }
+        </script>
+    </head>
+    <body>
+    <p>Number: <input type="text" id="txta"/></p>
+    <p>Number: <input type="text" id="txtb"/></p>
+    <p><input type="button" id="btnSum" value="Calculate Total" onclick="javascript:calculateSum()"/></p>
+    <p>The total is: <h2><div id="divTotal" style="color: green;"></div></h2></p>
+    <p>The result is from: <div id="divIP"></div></p>
+</body>
+</html>
